@@ -141,7 +141,7 @@ router.get("/:id", getTaskById);
  *       404:
  *         description: Task not found
  */
-router.put("/:id", updateTask);
+router.patch("/:id", authenticateToken, updateTask);
 
 
 /**
