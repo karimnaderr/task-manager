@@ -2,8 +2,38 @@ import { Request, Response } from "express";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import prisma from "../prismaClient";
+import { AuthenticatedRequest } from "../middleware/authMiddleware";
+
 
 const JWT_SECRET = process.env.JWT_SECRET || "default_secret";
+
+export const getMe = async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    if (!req.user) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    const user = await prisma.user.findUnique({
+      where: { id: req.user.id },
+      select: { id: true, firstName: true, lastName: true, email: true },
+    });
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.status(200).json({
+      id: user.id,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      name: `${user.firstName} ${user.lastName}`,
+    });
+  } catch (error) {
+    console.error("Get user info error:", error);
+    res.status(500).json({ message: "Error fetching user info." });
+  }
+};
 
 
 export const register = async (req: Request, res: Response) => {
