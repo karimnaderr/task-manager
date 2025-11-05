@@ -1,10 +1,18 @@
 import { Request, Response } from "express";
 import prisma from "../prismaClient";
 
+interface AuthenticatedRequest extends Request {
+  user?: { id: number; email: string };
+}
 
-export const getAllTasks = async (req: Request, res: Response) => {
+
+export const getAllTasks = async (req: AuthenticatedRequest, res: Response) => {
   try {
-    const userId = (req as any).user?.id;
+    const userId = req.user?.id;
+
+    if (!userId) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
 
     const tasks = await prisma.task.findMany({
       where: { userId },
@@ -19,10 +27,14 @@ export const getAllTasks = async (req: Request, res: Response) => {
 };
 
 
-export const createTask = async (req: Request, res: Response) => {
+export const createTask = async (req: AuthenticatedRequest, res: Response) => {
   try {
     const { title, description } = req.body;
-    const userId = (req as any).user?.id;
+    const userId = req.user?.id;
+
+    if (!userId) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
 
     if (!title) {
       return res.status(400).json({ message: "Title is required" });
