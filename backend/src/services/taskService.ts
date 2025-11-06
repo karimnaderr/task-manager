@@ -1,4 +1,5 @@
 import prisma from "../prismaClient";
+import { validateTask } from "../utils/validation";
 
 export const getAllTasks = async (userId: number) => {
   return prisma.task.findMany({
@@ -7,11 +8,15 @@ export const getAllTasks = async (userId: number) => {
   });
 };
 
-export const createTask = async (userId: number, title: string, description?: string) => {
-  if (!title) throw new Error("Title is required");
-  return prisma.task.create({
-    data: { title, description, userId },
-  });
+export const createTaskService = async (userId: number, title: string, description: string) => {
+    const error = validateTask(title, description);
+    if (error) throw new Error(error);
+  
+    const task = await prisma.task.create({
+      data: { userId, title, description },
+    });
+  
+    return task;
 };
 
 export const getTaskById = async (userId: number, taskId: number) => {
@@ -20,16 +25,26 @@ export const getTaskById = async (userId: number, taskId: number) => {
   return task;
 };
 
-export const updateTask = async (userId: number, taskId: number, title?: string, description?: string) => {
-  await getTaskById(userId, taskId); // check existence & ownership
-  return prisma.task.update({
-    where: { id: taskId },
-    data: { title, description },
-  });
-};
+export const updateTask = async (
+    userId: number,
+    taskId: number,
+    title?: string,
+    description?: string
+  ) => {
+    await getTaskById(userId, taskId); 
+  
+    const error = validateTask(title ?? "", description ?? "");
+    if (error) throw new Error(error);
+  
+    return prisma.task.update({
+      where: { id: taskId },
+      data: { title, description },
+    });
+  };
+  
 
 export const deleteTask = async (userId: number, taskId: number) => {
-  await getTaskById(userId, taskId); // check existence & ownership
+  await getTaskById(userId, taskId); 
   return prisma.task.delete({ where: { id: taskId } });
 };
 

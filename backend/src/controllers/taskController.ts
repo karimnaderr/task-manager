@@ -19,11 +19,13 @@ export const getAllTasks = async (req: AuthenticatedRequest, res: Response) => {
 
 export const createTask = async (req: AuthenticatedRequest, res: Response) => {
   try {
+    const { title, description } = req.body;
     const userId = req.user?.id;
+
     if (!userId) return res.status(401).json({ message: "Unauthorized" });
 
-    const { title, description } = req.body;
-    const task = await taskService.createTask(userId, title, description);
+    const task = await taskService.createTaskService(userId, title, description); 
+
     res.status(201).json(task);
   } catch (error: any) {
     res.status(400).json({ message: error.message || "Error creating task" });
@@ -53,7 +55,7 @@ export const updateTask = async (req: AuthenticatedRequest, res: Response) => {
     const updatedTask = await taskService.updateTask(userId, taskId, title, description);
     res.status(200).json(updatedTask);
   } catch (error: any) {
-    res.status(404).json({ message: error.message });
+    res.status(400).json({ message: error.message });
   }
 };
 
