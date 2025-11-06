@@ -1,0 +1,183 @@
+{
+    "info": {
+      "name": "Task Manager API",
+      "_postman_id": "12345678-90ab-cdef-1234-567890abcdef",
+      "description": "Postman collection for Task Manager backend",
+      "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+      {
+        "name": "Login User",
+        "request": {
+          "method": "POST",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": {
+            "mode": "raw",
+            "raw": "{\n    \"email\": \"your_email@example.com\",\n    \"password\": \"your_password\"\n}"
+          },
+          "url": {
+            "raw": "http://localhost:4000/api/auth/login",
+            "protocol": "http",
+            "host": ["localhost"],
+            "port": "4000",
+            "path": ["api", "auth", "login"]
+          }
+        },
+        "response": [],
+        "event": [
+          {
+            "listen": "test",
+            "script": {
+              "exec": [
+                "const jsonData = pm.response.json();",
+                "pm.environment.set(\"token\", jsonData.token);"
+              ],
+              "type": "text/javascript"
+            }
+          }
+        ]
+      },
+      {
+        "name": "Get All Tasks",
+        "request": {
+          "method": "GET",
+          "header": [
+            {
+              "key": "Authorization",
+              "value": "Bearer {{token}}"
+            }
+          ],
+          "url": {
+            "raw": "http://localhost:4000/api/tasks",
+            "protocol": "http",
+            "host": ["localhost"],
+            "port": "4000",
+            "path": ["api", "tasks"]
+          }
+        },
+        "response": []
+      },
+      {
+        "name": "Create Task",
+        "request": {
+          "method": "POST",
+          "header": [
+            {
+              "key": "Authorization",
+              "value": "Bearer {{token}}"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": {
+            "mode": "raw",
+            "raw": "{\n    \"title\": \"New Task\",\n    \"description\": \"Task description 123\"\n}"
+          },
+          "url": {
+            "raw": "http://localhost:4000/api/tasks",
+            "protocol": "http",
+            "host": ["localhost"],
+            "port": "4000",
+            "path": ["api", "tasks"]
+          }
+        },
+        "response": []
+      },
+      {
+        "name": "Get Task By ID",
+        "request": {
+          "method": "GET",
+          "header": [
+            {
+              "key": "Authorization",
+              "value": "Bearer {{token}}"
+            }
+          ],
+          "url": {
+            "raw": "http://localhost:4000/api/tasks/1",
+            "protocol": "http",
+            "host": ["localhost"],
+            "port": "4000",
+            "path": ["api", "tasks", "1"]
+          }
+        },
+        "response": []
+      },
+      {
+        "name": "Update Task",
+        "request": {
+          "method": "PATCH",
+          "header": [
+            {
+              "key": "Authorization",
+              "value": "Bearer {{token}}"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": {
+            "mode": "raw",
+            "raw": "{\n    \"title\": \"Updated Task\",\n    \"description\": \"Updated description 456\"\n}"
+          },
+          "url": {
+            "raw": "http://localhost:4000/api/tasks/1",
+            "protocol": "http",
+            "host": ["localhost"],
+            "port": "4000",
+            "path": ["api", "tasks", "1"]
+          }
+        },
+        "response": []
+      },
+      {
+        "name": "Delete Task",
+        "request": {
+          "method": "DELETE",
+          "header": [
+            {
+              "key": "Authorization",
+              "value": "Bearer {{token}}"
+            }
+          ],
+          "url": {
+            "raw": "http://localhost:4000/api/tasks/1",
+            "protocol": "http",
+            "host": ["localhost"],
+            "port": "4000",
+            "path": ["api", "tasks", "1"]
+          }
+        },
+        "response": []
+      },
+      {
+        "name": "Toggle Task Complete",
+        "request": {
+          "method": "PATCH",
+          "header": [
+            {
+              "key": "Authorization",
+              "value": "Bearer {{token}}"
+            }
+          ],
+          "url": {
+            "raw": "http://localhost:4000/api/tasks/1/complete",
+            "protocol": "http",
+            "host": ["localhost"],
+            "port": "4000",
+            "path": ["api", "tasks", "1", "complete"]
+          }
+        },
+        "response": []
+      }
+    ]
+  }
+  

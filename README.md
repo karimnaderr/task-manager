@@ -12,6 +12,8 @@ Setup & Running
 
 Project Structure
 
+Postman Collection
+
 Validations
 
 Decisions & Rationale
@@ -47,8 +49,8 @@ Backend
 
 Clone the repository:
 
-git clone <your-repo-url>
-cd <your-repo-name>/backend
+git clone https://github.com/karimnaderr/task-manager.git
+cd task-manager/backend
 
 
 Install dependencies:
@@ -131,6 +133,26 @@ All inputs are validated before interacting with the database.
 Passwords are hashed before saving.
 
 Users cannot create or edit tasks with invalid/empty data.
+
+Postman Collection
+
+A Postman collection is provided to test all backend APIs. Follow these steps:
+
+Open Postman (desktop or web).
+
+Import the collection taskmanager.postman.json located in the project root.
+
+Import the environment taskmanager.postman_environment.json (optional for storing variables like token).
+
+Start with the Register User request to create a new user.
+
+Use the Login User request to obtain a JWT token.
+
+Copy the token and set it as the {{token}} variable in the environment.
+
+Test all Tasks endpoints (Create, Get, Update, Delete, Toggle Complete) using the token in the Authorization header (Bearer {{token}}).
+
+Note: The collection is meant to help the frontend team test the API easily.
 
 Decisions & Rationale
 
