@@ -34,24 +34,23 @@ const TaskItem = ({
       <div className="card-body d-flex flex-column">
         {isEditing ? (
           <>
-            <div className="mb-3">
+            <div className="mb-3 flex-grow-1" style={{ minHeight: "6rem" }}>
               <input
-                className="form-control"
+                className="form-control mb-2"
                 value={editTitle}
                 onChange={(e) => onEditTitleChange(e.target.value)}
                 disabled={saving}
                 placeholder="Task Title"
+                style={{ height: "2.5rem" }}
               />
-            </div>
-            <div className="mb-3 flex-grow-1">
               <textarea
                 className="form-control"
                 value={editDescription}
                 onChange={(e) => onEditDescriptionChange(e.target.value)}
                 disabled={saving}
                 placeholder="Task Description"
-                rows={4}
-                style={{ resize: "none" }}
+                rows={2}
+                style={{ resize: "none", height: "3.5rem", overflow: "auto" }}
               />
             </div>
             <div className="d-flex gap-2 mt-auto">
@@ -75,16 +74,21 @@ const TaskItem = ({
           </>
         ) : (
           <>
-            <div className="mb-3 flex-grow-1">
-              <h5
-                className="card-title mb-2"
-                style={{
-                  textDecoration: task.completed ? "line-through" : "none",
-                  color: task.completed ? "#6c757d" : "inherit",
-                }}
-              >
-                {task.title}
-              </h5>
+            <div className="mb-3 flex-grow-1" style={{ minHeight: "6rem" }}>
+              <div className="d-flex align-items-center gap-2 mb-2">
+                <h5
+                  className="card-title mb-0"
+                  style={{
+                    textDecoration: task.completed ? "line-through" : "none",
+                    color: task.completed ? "#6c757d" : "inherit",
+                  }}
+                >
+                  {task.title}
+                </h5>
+                {task.completed && (
+                  <span className="badge bg-success" style={{ fontSize: "0.65rem" }}>Completed</span>
+                )}
+              </div>
               {task.description && (
                 <p className="card-text text-muted mb-0" style={{ minHeight: "3rem" }}>
                   {task.description}
@@ -92,9 +96,6 @@ const TaskItem = ({
               )}
             </div>
             <div className="mt-auto">
-              {task.completed && (
-                <span className="badge bg-success mb-2">Completed</span>
-              )}
               <div className="d-flex flex-column gap-2">
                 <button
                   className={`btn btn-sm ${

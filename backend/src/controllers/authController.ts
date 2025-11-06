@@ -3,6 +3,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import prisma from "../prismaClient";
 import { AuthenticatedRequest } from "../middleware/authMiddleware";
+import { validatePassword } from "../utils/validation";
 
 
 const JWT_SECRET = process.env.JWT_SECRET || "default_secret";
@@ -42,6 +43,12 @@ export const register = async (req: Request, res: Response) => {
 
     if (!firstName || !lastName || !email || !password) {
       return res.status(400).json({ message: "All fields are required." });
+    }
+    
+    try {
+      validatePassword(password);
+    } catch (err: any) {
+      return res.status(400).json({ message: err.message });
     }
 
     const existingUser = await prisma.user.findUnique({ where: { email } });

@@ -2,6 +2,8 @@ import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import axiosClient from "../api/axiosClient";
 import PublicRoute from "../components/PublicRoute/PublicRoute";
+import { validatePassword } from "../utils/validation";
+
 
 const SignUp = () => {
   const [firstName, setFirstName] = useState("");
@@ -18,6 +20,13 @@ const SignUp = () => {
     setLoading(true);
 
     try {
+      const passwordError = validatePassword(password);
+      if (passwordError) {
+        setError(passwordError);
+        setLoading(false);
+        return;
+      }
+
       await axiosClient.post("/auth/register", {
         firstName,
         lastName,
